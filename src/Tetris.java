@@ -15,6 +15,7 @@ public class Tetris extends javax.swing.JFrame {
      */
     public Tetris() {
         initComponents();
+        board.setScore(scoreBoard);
     }
 
     /**
@@ -36,7 +37,7 @@ public class Tetris extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        scoreBoard.setText("scoreBoard1");
+        scoreBoard.setText("scoreBoard");
         getContentPane().add(scoreBoard, java.awt.BorderLayout.PAGE_END);
 
         javax.swing.GroupLayout boardLayout = new javax.swing.GroupLayout(board);
