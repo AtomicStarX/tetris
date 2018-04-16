@@ -81,9 +81,9 @@ public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
     private boolean pause;
-    private boolean hardMode;
-    private boolean easyMode;
-    private boolean mediumMode;
+    public boolean hardMode;
+    public boolean easyMode;
+    public boolean mediumMode;
 
     MyKeyAdapter keyAdepter;
 
@@ -104,12 +104,10 @@ public class Board extends JPanel implements ActionListener {
     public void decrementDeltaTime(){
         if(easyMode){
             deltaTime = deltaTime -1; 
-        }
-        
+        }    
         if(mediumMode){
             deltaTime = deltaTime -5;
-        }
-        
+        }    
         if(hardMode){
             deltaTime = deltaTime -10;
         }
@@ -196,7 +194,7 @@ public class Board extends JPanel implements ActionListener {
     }
 
     public void gameOver() {
-        String message = "Youre Score is " + ScoreBoard.getScore() + '\n' + "Do you want To play Aagain?";
+        String message = "Youre Score is " + ScoreBoard.getScore() +" !!! " + '\n' + "Do you want To play Aagain?";
         String title = "Game Over";
         int reply = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
@@ -302,6 +300,9 @@ public class Board extends JPanel implements ActionListener {
             drawSquare(g, currentRow + squaresArray[point][1], currentCol + squaresArray[point][0], currentShape.getShape());
 
         }
+    }
+    public Timer getTimer(){
+        return timer;
     }
 
 }

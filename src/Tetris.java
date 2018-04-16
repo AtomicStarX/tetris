@@ -1,4 +1,5 @@
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /*
@@ -6,7 +7,6 @@ import javax.swing.JOptionPane;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author victor
@@ -35,8 +35,7 @@ public class Tetris extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         jMenuItemInitGame = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jMenuItemChangeDifficulty = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,13 +65,15 @@ public class Tetris extends javax.swing.JFrame {
         });
         jMenu3.add(jMenuItemInitGame);
 
+        jMenuItemChangeDifficulty.setText("ChangeDifficulty");
+        jMenuItemChangeDifficulty.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemChangeDifficultyActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemChangeDifficulty);
+
         jMenuBar1.add(jMenu3);
-
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -80,10 +81,44 @@ public class Tetris extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemInitGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemInitGameActionPerformed
-
-        board.initGame();     
+        changeDifficulty();
+        board.initGame();
     }//GEN-LAST:event_jMenuItemInitGameActionPerformed
 
+    private void jMenuItemChangeDifficultyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemChangeDifficultyActionPerformed
+        resetDifficulty();
+        board.getTimer().stop();
+        changeDifficulty();
+        board.getTimer().start();
+    }//GEN-LAST:event_jMenuItemChangeDifficultyActionPerformed
+
+    private void changeDifficulty(){
+        JFrame frame = new JFrame();
+        String[] options = new String[3];
+        options[0] = new String("Hard");
+        options[1] = new String("Medium");
+        options[2] = new String("Easy");
+        int gameMode = JOptionPane.showOptionDialog(frame.getContentPane(), "Select The Game Difficulty", "GameMode", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
+        switch (gameMode){
+            case 0:
+                board.hardMode = true;
+                break;
+            case 1:
+                board.mediumMode = true;
+                break;
+            case 2:
+                board.easyMode = true;
+                break;
+            default:
+                board.mediumMode = true;
+                break;
+        }
+    }
+    private void resetDifficulty(){
+        board.hardMode = false;
+        board.mediumMode = false;
+        board.easyMode = false;
+    }
     /**
      * @param args the command line arguments
      */
@@ -121,10 +156,9 @@ public class Tetris extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Board board;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItemChangeDifficulty;
     private javax.swing.JMenuItem jMenuItemInitGame;
     private ScoreBoard scoreBoard;
     // End of variables declaration//GEN-END:variables
