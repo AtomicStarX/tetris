@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 
 public class ScoreBoard extends JLabel implements IncrementScore{
     
-    private int score;
+    public static int score;
     
     public ScoreBoard() {
         super();
@@ -31,6 +31,10 @@ public class ScoreBoard extends JLabel implements IncrementScore{
     public void reset() {
         score = 0;
         this.setText("Score : " + score);
+    }
+    
+    public static int getScore(){
+        return score;
     }
     
 }

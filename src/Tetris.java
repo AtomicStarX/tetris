@@ -1,3 +1,6 @@
+
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -77,7 +80,8 @@ public class Tetris extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItemInitGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemInitGameActionPerformed
-        board.initGame();
+
+        board.initGame();     
     }//GEN-LAST:event_jMenuItemInitGameActionPerformed
 
     /**

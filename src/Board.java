@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /*
@@ -23,7 +26,7 @@ public class Board extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
-                    
+
                     if (canMoveTo(currentShape, currentRow, currentCol - 1) && !pause) {
                         currentCol--;
                     }
@@ -45,10 +48,10 @@ public class Board extends JPanel implements ActionListener {
                     }
                     break;
                 case KeyEvent.VK_SPACE:
-                    if(!pause){
+                    if (!pause) {
                         pause = true;
                         timer.stop();
-                    }else{
+                    } else {
                         pause = false;
                         timer.start();
                     }
@@ -61,7 +64,7 @@ public class Board extends JPanel implements ActionListener {
         }
 
     }
-    
+
     public IncrementScore scoreDelegete;
 
     public static final int NUM_ROWS = 22;
@@ -78,8 +81,13 @@ public class Board extends JPanel implements ActionListener {
 
     private Timer timer;
     private boolean pause;
+    private boolean hardMode;
+    private boolean easyMode;
+    private boolean mediumMode;
 
     MyKeyAdapter keyAdepter;
+
+    final JFrame frame = new JFrame("Tetris Game");
 
     public Board() {
         super();
@@ -88,8 +96,23 @@ public class Board extends JPanel implements ActionListener {
         timer = new Timer(deltaTime, this);
         keyAdepter = new MyKeyAdapter();
     }
-    public void setScore(IncrementScore scorer){
+
+    public void setScore(IncrementScore scorer) {
         this.scoreDelegete = scorer;
+    }
+    
+    public void decrementDeltaTime(){
+        if(easyMode){
+            deltaTime = deltaTime -1; 
+        }
+        
+        if(mediumMode){
+            deltaTime = deltaTime -5;
+        }
+        
+        if(hardMode){
+            deltaTime = deltaTime -10;
+        }
     }
 
     public void initValues() {
@@ -172,20 +195,40 @@ public class Board extends JPanel implements ActionListener {
         repaint();
     }
 
+    public void gameOver() {
+        String message = "Youre Score is " + ScoreBoard.getScore() + '\n' + "Do you want To play Aagain?";
+        String title = "Game Over";
+        int reply = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
+        if (reply == JOptionPane.YES_OPTION) {
+            new Tetris();
+            initGame();
+        } else {
+            System.exit(1);
+        }
+    }
+
     // Game Main Loop
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (canMoveTo(currentShape, currentRow + 1, currentCol)) {
             currentRow++;
-            repaint();  
+            repaint();
+            if(ScoreBoard.getScore() % 3 == 0){
+                decrementDeltaTime();
+            }
         } else {
-            moveCurrentShapeToMatrix();
-            currentShape = new Shape();
-            currentRow = INIT_ROW;
-            currentCol = NUM_COLS / 2;
-            completeLine();
+            if (currentRow + currentShape.getYmin() < 0) {
+                gameOver();
+            } else {
+                moveCurrentShapeToMatrix();
+                currentShape = new Shape();
+                currentRow = INIT_ROW;
+                currentCol = NUM_COLS / 2;
+                completeLine();
+            }
+
         }
-        
+
     }
 
     private void moveCurrentShapeToMatrix() {
@@ -194,6 +237,7 @@ public class Board extends JPanel implements ActionListener {
             int row = currentRow + squaresArray[point][1];
             int col = currentCol + squaresArray[point][0];
             matrix[row][col] = currentShape.getShape();
+
         }
     }
 
