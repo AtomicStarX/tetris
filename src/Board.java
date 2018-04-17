@@ -84,6 +84,8 @@ public class Board extends JPanel implements ActionListener {
     public boolean hardMode;
     public boolean easyMode;
     public boolean mediumMode;
+    
+    private NextTetrominoes nextTetrominoes;
 
     MyKeyAdapter keyAdepter;
 
@@ -95,6 +97,10 @@ public class Board extends JPanel implements ActionListener {
         initValues();
         timer = new Timer(deltaTime, this);
         keyAdepter = new MyKeyAdapter();
+    }
+    
+    public void setNextTetrominoes(NextTetrominoes nextTetrominoes){
+        this.nextTetrominoes=nextTetrominoes;
     }
 
     public void setScore(IncrementScore scorer) {
@@ -219,7 +225,8 @@ public class Board extends JPanel implements ActionListener {
                 gameOver();
             } else {
                 moveCurrentShapeToMatrix();
-                currentShape = new Shape();
+                currentShape = nextTetrominoes.getNextTetrominoes();
+                nextTetrominoes.generateNextTetrominoes();
                 currentRow = INIT_ROW;
                 currentCol = NUM_COLS / 2;
                 completeLine();
