@@ -23,6 +23,8 @@ public class Tetris extends javax.swing.JFrame {
         board.setScore(scoreBoard);
         gameStarted = false;
         board.setNextTetrominoes(nextTetrominoes);
+        board.setSavedTetrominoes(savedTetrominoes);
+        board.setParentFrame(this);
     }
 
     /**
@@ -35,9 +37,13 @@ public class Tetris extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         scoreBoard = new ScoreBoard();
         jPanel3 = new javax.swing.JPanel();
         nextTetrominoes = new NextTetrominoes();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        savedTetrominoes = new SavedTetrominoes();
         board = new Board();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
@@ -55,6 +61,17 @@ public class Tetris extends javax.swing.JFrame {
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         scoreBoard.setText("scoreBoard");
@@ -64,10 +81,26 @@ public class Tetris extends javax.swing.JFrame {
         nextTetrominoes.setLayout(nextTetrominoesLayout);
         nextTetrominoesLayout.setHorizontalGroup(
             nextTetrominoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 95, Short.MAX_VALUE)
         );
         nextTetrominoesLayout.setVerticalGroup(
             nextTetrominoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 95, Short.MAX_VALUE)
+        );
+
+        jLabel1.setBackground(new java.awt.Color(255, 51, 0));
+        jLabel1.setText("Next Piece");
+
+        jLabel2.setText("Saved Piece");
+
+        javax.swing.GroupLayout savedTetrominoesLayout = new javax.swing.GroupLayout(savedTetrominoes);
+        savedTetrominoes.setLayout(savedTetrominoesLayout);
+        savedTetrominoesLayout.setHorizontalGroup(
+            savedTetrominoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        savedTetrominoesLayout.setVerticalGroup(
+            savedTetrominoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
 
@@ -76,14 +109,29 @@ public class Tetris extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(nextTetrominoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(nextTetrominoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(savedTetrominoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(nextTetrominoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 164, Short.MAX_VALUE))
+                .addGap(65, 65, 65)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(savedTetrominoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel3, java.awt.BorderLayout.LINE_END);
@@ -92,11 +140,11 @@ public class Tetris extends javax.swing.JFrame {
         board.setLayout(boardLayout);
         boardLayout.setHorizontalGroup(
             boardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 213, Short.MAX_VALUE)
         );
         boardLayout.setVerticalGroup(
             boardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 264, Short.MAX_VALUE)
+            .addGap(0, 426, Short.MAX_VALUE)
         );
 
         getContentPane().add(board, java.awt.BorderLayout.CENTER);
@@ -213,13 +261,17 @@ public class Tetris extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private Board board;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemChangeDifficulty;
     private javax.swing.JMenuItem jMenuItemInitGame;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private NextTetrominoes nextTetrominoes;
+    private SavedTetrominoes savedTetrominoes;
     private ScoreBoard scoreBoard;
     // End of variables declaration//GEN-END:variables
 }

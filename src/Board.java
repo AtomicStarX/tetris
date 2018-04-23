@@ -24,6 +24,7 @@ public class Board extends JPanel implements ActionListener {
 
         @Override
         public void keyPressed(KeyEvent e) {
+
             switch (e.getKeyCode()) {
                 case KeyEvent.VK_LEFT:
 
@@ -56,6 +57,14 @@ public class Board extends JPanel implements ActionListener {
                         timer.start();
                     }
                     break;
+                    case KeyEvent.VK_ENTER:
+                        savedTetrominoes.swapTetrominoes(nextTetrominoes.getNextTetrominoes());
+                        if(accumulatorShapesSaveds == 0 ){
+                            nextTetrominoes.generateNextTetrominoes();
+                            accumulatorShapesSaveds++;
+                        }
+                        nextTetrominoes.repaint();
+                    break;
                 default:
                     break;
 
@@ -65,6 +74,8 @@ public class Board extends JPanel implements ActionListener {
 
     }
 
+    private JFrame parentFrame;
+    
     public IncrementScore scoreDelegete;
 
     public static final int NUM_ROWS = 22;
@@ -78,6 +89,7 @@ public class Board extends JPanel implements ActionListener {
 
     private int currentRow;
     private int currentCol;
+    private int accumulatorShapesSaveds;
 
     private Timer timer;
     private boolean pause;
@@ -85,7 +97,10 @@ public class Board extends JPanel implements ActionListener {
     public boolean easyMode;
     public boolean mediumMode;
     
+    private int [] topScores;
+
     private NextTetrominoes nextTetrominoes;
+    private SavedTetrominoes savedTetrominoes;
 
     MyKeyAdapter keyAdepter;
 
@@ -97,31 +112,43 @@ public class Board extends JPanel implements ActionListener {
         initValues();
         timer = new Timer(deltaTime, this);
         keyAdepter = new MyKeyAdapter();
+        topScores = new int[5];
+        for (int i = 0 ; i < 5; i++){
+            topScores[i] = 0;
+        }
+    }
+
+     public void setParentFrame(JFrame parentFrame) {
+        this.parentFrame = parentFrame;
+    }
+    public void setNextTetrominoes(NextTetrominoes nextTetrominoes) {
+        this.nextTetrominoes = nextTetrominoes;
     }
     
-    public void setNextTetrominoes(NextTetrominoes nextTetrominoes){
-        this.nextTetrominoes=nextTetrominoes;
+    public void setSavedTetrominoes(SavedTetrominoes savedTetrominoes) {
+        this.savedTetrominoes = savedTetrominoes;
     }
 
     public void setScore(IncrementScore scorer) {
         this.scoreDelegete = scorer;
     }
-    
-    public void decrementDeltaTime(){
-        if(easyMode){
-            deltaTime = deltaTime -1; 
-        }    
-        if(mediumMode){
-            deltaTime = deltaTime -5;
-        }    
-        if(hardMode){
-            deltaTime = deltaTime -10;
+
+    public void decrementDeltaTime() {
+        if (easyMode) {
+            deltaTime = deltaTime - 1;
+        }
+        if (mediumMode) {
+            deltaTime = deltaTime - 5;
+        }
+        if (hardMode) {
+            deltaTime = deltaTime - 10;
         }
     }
 
     public void initValues() {
         setFocusable(true);
         cleanBoard();
+
         deltaTime = 500;
         currentShape = null;
         currentRow = INIT_ROW;
@@ -130,7 +157,9 @@ public class Board extends JPanel implements ActionListener {
     }
 
     public void initGame() {
+
         initValues();
+        accumulatorShapesSaveds = 0;
         currentShape = new Shape();
         addKeyListener(keyAdepter);
         timer.start();
@@ -200,8 +229,20 @@ public class Board extends JPanel implements ActionListener {
     }
 
     public void gameOver() {
-        String message = "Youre Score is " + ScoreBoard.getScore() +" !!! " + '\n' + "Do you want To play Aagain?";
+        /*int aux = 0 ;*/
+        int score = ScoreBoard.getScore();
+        removeKeyListener(keyAdepter);
+        RecordsDialog d= new RecordsDialog(parentFrame, true, score);
+        String message = "Youre Score is " + score + " !!! " + '\n' + "Do you want To play Aagain?";
         String title = "Game Over";
+        
+        /*for(int i = 0 ; i < 5 ; i++){
+            if(score > topScores[i]){
+                aux = topScores[i];
+                topScores[i] = score;
+                score = aux;
+            }
+        }*/
         int reply = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
         if (reply == JOptionPane.YES_OPTION) {
             new Tetris();
@@ -217,7 +258,7 @@ public class Board extends JPanel implements ActionListener {
         if (canMoveTo(currentShape, currentRow + 1, currentCol)) {
             currentRow++;
             repaint();
-            if(ScoreBoard.getScore() % 3 == 0){
+            if (ScoreBoard.getScore() % 3 == 0) {
                 decrementDeltaTime();
             }
         } else {
@@ -249,7 +290,7 @@ public class Board extends JPanel implements ActionListener {
     public void drawBoard(Graphics g) {
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
-                drawSquare(g, row, col, matrix[row][col]);
+                Util.drawSquare(g, row, col, matrix[row][col],squareWidth(),squareHeight());
             }
         }
     }
@@ -259,7 +300,7 @@ public class Board extends JPanel implements ActionListener {
         super.paintComponent(g);
         drawBoard(g);
         if (currentShape != null) {
-            drawCurrentShape(g);
+            currentShape.draw(g,currentRow,currentCol,squareWidth(),squareHeight());
         }
         drawBorder(g);
     }
@@ -269,30 +310,7 @@ public class Board extends JPanel implements ActionListener {
         g.drawRect(0, 0, NUM_COLS * squareWidth(), (NUM_ROWS * squareHeight()) + 1);
     }
 
-    private void drawSquare(Graphics g, int row, int col, Tetrominoes shape) {
-        Color colors[] = {new Color(0, 0, 0),
-            new Color(204, 102, 102),
-            new Color(102, 204, 102), new Color(102, 102, 204),
-            new Color(204, 204, 102), new Color(204, 102, 204),
-            new Color(102, 204, 204), new Color(218, 170, 0)
-        };
-        int x = col * squareWidth();
-        int y = row * squareHeight();
-        Color color = colors[shape.ordinal()];
-        g.setColor(color);
-        g.fillRect(x + 1, y + 1, squareWidth() - 2,
-                squareHeight() - 2);
-        g.setColor(color.brighter());
-        g.drawLine(x, y + squareHeight() - 1, x, y);
-        g.drawLine(x, y, x + squareWidth() - 1, y);
-        g.setColor(color.darker());
-        g.drawLine(x + 1, y + squareHeight() - 1,
-                x + squareWidth() - 1, y + squareHeight() - 1);
-        g.drawLine(x + squareWidth() - 1,
-                y + squareHeight() - 1,
-                x + squareWidth() - 1, y + 1);
-    }
-
+    
     private int squareWidth() {
         return getWidth() / NUM_COLS;
     }
@@ -301,14 +319,8 @@ public class Board extends JPanel implements ActionListener {
         return getHeight() / NUM_ROWS;
     }
 
-    private void drawCurrentShape(Graphics g) {
-        int[][] squaresArray = currentShape.getCoordnates();
-        for (int point = 0; point <= 3; point++) {
-            drawSquare(g, currentRow + squaresArray[point][1], currentCol + squaresArray[point][0], currentShape.getShape());
 
-        }
-    }
-    public Timer getTimer(){
+    public Timer getTimer() {
         return timer;
     }
 
