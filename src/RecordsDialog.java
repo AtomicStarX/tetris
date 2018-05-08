@@ -30,7 +30,9 @@ public class RecordsDialog extends javax.swing.JDialog {
         }
     }
 
-    private static final String RECORD_FILE_NAME = "records.txt";
+    private static final String RECORD_FILE_NAME_SNAKE_EASY = "recordsSnakeEasy.txt";
+    private static final String RECORD_FILE_NAME_SNAKE_MEDIUM = "recordsSnakeMedium.txt";
+    private static final String RECORD_FILE_NAME_SNAKE_HARD = "recordsSnakeHard.txt";
     private int score;
     private JLabel[] recordLabels;
     private int minRecord;
@@ -67,7 +69,7 @@ public class RecordsDialog extends javax.swing.JDialog {
     private void readRecords() throws FileNotFoundException, IOException {
         BufferedReader input = null;
         try {
-            input = new BufferedReader(new FileReader(RECORD_FILE_NAME));
+            input = new BufferedReader(new FileReader(RECORD_FILE_NAME_SNAKE_EASY));
             int lineCount = 0;
             String line;
             String[] lineRecords = null;
@@ -218,7 +220,7 @@ public class RecordsDialog extends javax.swing.JDialog {
         int lineCounter = 0;
         boolean alreadyWrittenScore = false;
         try {
-            output = new PrintWriter(new FileWriter(RECORD_FILE_NAME));
+            output = new PrintWriter(new FileWriter(RECORD_FILE_NAME_SNAKE_EASY));
             for (Record record : listOfRecords) {
                 if (score > record.record && !alreadyWrittenScore);
                 {

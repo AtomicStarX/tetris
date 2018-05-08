@@ -233,8 +233,8 @@ public class Board extends JPanel implements ActionListener {
         int score = ScoreBoard.getScore();
         removeKeyListener(keyAdepter);
         RecordsDialog d= new RecordsDialog(parentFrame, true, score);
-        String message = "Youre Score is " + score + " !!! " + '\n' + "Do you want To play Aagain?";
-        String title = "Game Over";
+        //String message = "Youre Score is " + score + " !!! " + '\n' + "Do you want To play Aagain?";
+        //String title = "Game Over";
         
         /*for(int i = 0 ; i < 5 ; i++){
             if(score > topScores[i]){
@@ -243,13 +243,13 @@ public class Board extends JPanel implements ActionListener {
                 score = aux;
             }
         }*/
-        int reply = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
-        if (reply == JOptionPane.YES_OPTION) {
-            new Tetris();
-            initGame();
-        } else {
-            System.exit(1);
-        }
+        //int reply = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
+        //if (reply == JOptionPane.YES_OPTION) {
+        //    new Tetris();
+        //    initGame();
+        //} else {
+        //    System.exit(1);
+        //}
     }
 
     // Game Main Loop
